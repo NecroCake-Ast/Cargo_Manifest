@@ -17,7 +17,7 @@ namespace Practic_3_curs.Views
         Form          Waybills_Edit;
         Carriers_Form Carriers_Edit;
         Form          Airports_Edit;
-        Clients_Form   Clients_Edit;
+        Clients_Form  Clients_Edit;
         Form          CargoTypes_Edit;
         public MainContainer()
         {
@@ -69,7 +69,7 @@ namespace Practic_3_curs.Views
 
         public void Clients_Show()
         {
-            //Carriers_Edit.LoadCarriers();
+            Clients_Edit.LoadClients();
             ShowForm(Clients_Edit);
         }
     }

@@ -5,7 +5,8 @@
     /// </summary>
     public class CWaybill
     {
-        public int  Code { get; set; }   //!< Код накладной
-        public long Num  { get; set; }   //!< Номер накладной
+        public int  Code     { get; set; }   //!< Код накладной
+        public long Num      { get; set; }   //!< Номер накладной
+        public int  Manifest { get; set; }   //!< Код манифеста
     }
 }

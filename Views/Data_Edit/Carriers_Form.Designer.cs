@@ -153,6 +153,7 @@
             this.Carriers_Field.Size = new System.Drawing.Size(548, 241);
             this.Carriers_Field.TabIndex = 11;
             this.Carriers_Field.TabStop = false;
+            this.Carriers_Field.WordWrap = false;
             // 
             // Carriers_Form
             // 

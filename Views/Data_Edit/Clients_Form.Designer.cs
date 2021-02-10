@@ -52,6 +52,7 @@ namespace Practic_3_curs.Views
             this.Remove_btn.TabIndex = 20;
             this.Remove_btn.Text = "Удалить";
             this.Remove_btn.UseVisualStyleBackColor = true;
+            this.Remove_btn.Click += new System.EventHandler(this.onRemoveClick);
             // 
             // Update_btn
             // 
@@ -63,6 +64,7 @@ namespace Practic_3_curs.Views
             this.Update_btn.TabIndex = 19;
             this.Update_btn.Text = "Изменить";
             this.Update_btn.UseVisualStyleBackColor = true;
+            this.Update_btn.Click += new System.EventHandler(this.onUpdateClick);
             // 
             // Add_btn
             // 
@@ -74,6 +76,7 @@ namespace Practic_3_curs.Views
             this.Add_btn.TabIndex = 18;
             this.Add_btn.Text = "Добавить";
             this.Add_btn.UseVisualStyleBackColor = true;
+            this.Add_btn.Click += new System.EventHandler(this.onAddClick);
             // 
             // Phone_Inp
             // 
@@ -136,6 +139,7 @@ namespace Practic_3_curs.Views
             this.Menu_btn.TabIndex = 11;
             this.Menu_btn.Text = "Меню";
             this.Menu_btn.UseVisualStyleBackColor = true;
+            this.Menu_btn.Click += new System.EventHandler(this.onMenuShow);
             // 
             // Carriers_Field
             // 
@@ -151,7 +155,7 @@ namespace Practic_3_curs.Views
             this.Carriers_Field.TabIndex = 21;
             this.Carriers_Field.TabStop = false;
             // 
-            // Client_Form
+            // Clients_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -167,7 +171,7 @@ namespace Practic_3_curs.Views
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Menu_btn);
-            this.Name = "Client_Form";
+            this.Name = "Clients_Form";
             this.Text = "Client_Form";
             this.ResumeLayout(false);
             this.PerformLayout();
