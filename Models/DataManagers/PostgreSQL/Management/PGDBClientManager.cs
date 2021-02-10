@@ -75,13 +75,24 @@ namespace Practic_3_curs.Models
         /// <param name="client">Новые данные</param>
         public void Update(Stored_Client client)
         {
-            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
-            DB.Open();
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.Connection = DB;
-            cmd.CommandText = "UPDATE \"Client\" SET \"Name\" = '" + client.Name
-                + "', \"Phone\" = '" + client.Phone + "' WHERE \"ID\" = '" + client.ID + "'";
-            cmd.ExecuteNonQuery();
+            if (client.Name != "" || client.Phone != "")
+            {
+                NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+                DB.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand();
+                cmd.Connection = DB;
+                cmd.CommandText = "UPDATE \"Client\" SET";
+                if (client.Name != "")
+                {
+                    cmd.CommandText += " \"Name\" = '" + client.Name + "'";
+                    if (client.Phone != "")
+                        cmd.CommandText += ",";
+                }
+                if (client.Phone != "")
+                    cmd.CommandText += " \"Phone\" = '" + client.Phone + "'"; 
+                cmd.CommandText += " WHERE \"ID\" = '" + client.ID + "'";
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }
