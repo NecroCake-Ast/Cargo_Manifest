@@ -6,14 +6,14 @@
     public class CFlight
     {
         public string CarrierCode { get; set; }   //!< Код перевозчика
-        public int    Number      { get; set; }   //!< Номер рейса
+        public string Number      { get; set; }   //!< Номер рейса
 
         public string FullName { get => CarrierCode + Number; } //!< Код перевозчика + номер рейса
 
-        public CFlight(string code, int number)
+        public CFlight(string code, string number)
         {
-            CarrierCode = code.Trim();
-            Number = number;
+            CarrierCode = code.TrimEnd();
+            Number = number.TrimEnd();
         }
     }
 }

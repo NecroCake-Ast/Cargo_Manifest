@@ -11,19 +11,19 @@ namespace Practic_3_curs.Models
         /// Получение списка грузов
         /// </summary>
         /// <returns>Список грузов</returns>
-        List<Stored_Cargo> GetAllCargo();
+        List<Stored_Waybill> GetAllCargo();
 
         /// <summary>
         /// Добавление нового груза
         /// </summary>
         /// <param name="cargo">Данные нового груза</param>
-        void Add(Stored_Cargo cargo);
+        void Add(Stored_Waybill cargo);
 
         /// <summary>
         /// Обновление данных о грузах
         /// </summary>
         /// <param name="cargo">Новые данные</param>
-        void Update(Stored_Cargo cargo);
+        void Update(Stored_Waybill cargo);
 
         /// <summary>
         /// Удаление информации о грузах

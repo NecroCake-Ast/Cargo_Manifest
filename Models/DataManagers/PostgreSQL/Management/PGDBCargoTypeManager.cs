@@ -35,23 +35,43 @@ namespace Practic_3_curs.Models
         /// Получение списка товаров
         /// </summary>
         /// <returns>Список товаров</returns>
-        public List<Stored_CargoType> GetAllCargoType()
+        public List<Stored_CargoType> GetAllCargoTypes()
         {
             List<Stored_CargoType> cargotypes = new List<Stored_CargoType>();
             NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
-            cmd.CommandText = "SELECT \"EN_Name\", \"RU_Name\" FROM \"Cargo_Type\" ORDER BY \"ID\"";
+            cmd.CommandText = "SELECT \"ID\", \"EN_Name\", \"RU_Name\" FROM \"Cargo_Type\" ORDER BY \"ID\"";
             NpgsqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Stored_CargoType addType = new Stored_CargoType();
-                addType.En_Name = reader.GetString(0);
-                addType.Ru_Name = reader.GetString(1);
+                addType.ID = reader.GetInt32(0);
+                addType.En_Name = reader.GetString(1);
+                addType.Ru_Name = reader.GetString(2);
                 cargotypes.Add(addType);
             }
             return cargotypes;
+        }
+
+        /// <summary>
+        /// Возвращает ID типа груза по названию
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns>ID типа груза</returns>
+        public int GetTypeByName(string Name)
+        {
+            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+            DB.Open();
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            cmd.Connection = DB;
+            cmd.CommandText = "SELECT \"ID\" FROM \"Cargo_Type\" WHERE \"RU_Name\" = '" + Name
+                + "' OR \"EN_Name\" = '" + Name + "'";
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+                return reader.GetInt32(0);
+            throw new Exception("Типа груза с таким названием не существует");
         }
 
         /// <summary>
@@ -64,7 +84,7 @@ namespace Practic_3_curs.Models
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
-            cmd.CommandText = "DELETE FROM \"Cargo_Type\" WHERE \"ID\" = '" + id + "'";
+            cmd.CommandText = "DELETE FROM \"Cargo_Type\" WHERE \"ID\" = " + id;
             cmd.ExecuteNonQuery();
         }
 
@@ -74,13 +94,24 @@ namespace Practic_3_curs.Models
         /// <param name="cargotype">Новые данные</param>
         public void Update(Stored_CargoType cargotype)
         {
-            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
-            DB.Open();
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.Connection = DB;
-            cmd.CommandText = "UPDATE \"Cargo_Type\" SET \"En_Mane\" = '" + cargotype.En_Name
-                + "', \"RU_Name\" = '" + cargotype.Ru_Name + "' WHERE \"EN_Name\" = '" + cargotype.En_Name + "'";
-            cmd.ExecuteNonQuery();
+            if (cargotype.Ru_Name != "" || cargotype.En_Name != "")
+            {
+                NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+                DB.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand();
+                cmd.Connection = DB;
+                cmd.CommandText = "UPDATE \"Cargo_Type\" SET";
+                if (cargotype.En_Name != "")
+                {
+                    cmd.CommandText += " \"EN_Name\" = '" + cargotype.En_Name + "'";
+                    if (cargotype.Ru_Name != "")
+                        cmd.CommandText += ",";
+                }
+                if (cargotype.Ru_Name != "")
+                    cmd.CommandText += "\"RU_Name\" = '" + cargotype.Ru_Name + "'";
+                cmd.CommandText += " WHERE \"ID\" = " + cargotype.ID;
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

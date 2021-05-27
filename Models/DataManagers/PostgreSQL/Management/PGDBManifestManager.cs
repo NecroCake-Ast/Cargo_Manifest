@@ -20,22 +20,42 @@ namespace Practic_3_curs.Models
         /// Добавление нового манифеста
         /// </summary>
         /// <param name="manifest">Данные нового манифеста</param>
-        public void Add(Stored_Manifest manifest)
+        public void Add(Stored_Manifest manifest, IAirportManager airportManager, ICarrierManager carrierManager)
         {
             NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
             cmd.CommandText = "INSERT INTO \"Manifest\" (\"Carrier\", \"Flight\", \"Aircraft\", \"From\", \"To\", \"Date\") "
-                            + "VALUES ('" + manifest.Carrier + "', '" + manifest.Flight + "', '" + manifest.Aircraft + "', '" + manifest.From + "', '"
-                            + manifest.To + "', '" + manifest.Date + ")";
+                            + "VALUES ('" + manifest.Carrier + "', '" + manifest.Flight + "', '"
+                            + manifest.Aircraft + "', '" + airportManager.GetAirportByName(manifest.From) + "', '"
+                            + airportManager.GetAirportByName(manifest.To) + "', '" + manifest.Date + "')";
             cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+		/// Возвращает код селекта деклараций из базы данных
+		/// </summary>
+		/// <returns>Код селекта деклараций</returns>
+		string Manifest_Select_Code()
+        {
+            return (
+                    "SELECT \"Manifest\".\"ID\", \"Manifest\".\"Carrier\", "
+                  + "       \"Manifest\".\"Flight\", \"Manifest\".\"Aircraft\", "
+                  + "       \"From\".\"EN_Name\", \"To\".\"EN_Name\", "
+                  + "       \"Manifest\".\"Date\" "
+                  + "FROM \"Manifest\", "
+                  + "     \"Airport\" AS \"From\", \"Airport\" AS \"To\" "
+                  + "WHERE \"From\".\"ID\" = \"Manifest\".\"From\" "
+                  + "  AND \"To\".\"ID\" = \"Manifest\".\"To\" "
+                  + "ORDER BY \"Manifest\".\"Date\" DESC "
+            );
         }
 
         /// <summary>
         /// Получение списка манифеста
         /// </summary>
-        /// <returns>Список манифеста</returns>
+        /// <returns>Список манифестов</returns>
         public List<Stored_Manifest> GetAllManifest()
         {
             List<Stored_Manifest> manifests = new List<Stored_Manifest>();
@@ -43,17 +63,17 @@ namespace Practic_3_curs.Models
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
-            cmd.CommandText = "SELECT \"ID\", \"Carrier\", \"Flight\", \"Aircraft\", \"From\", \"To\", \"Date\" FROM \"Manifest\" ORDER BY \"Date\"";
+            cmd.CommandText = Manifest_Select_Code();
             NpgsqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Stored_Manifest addManifest = new Stored_Manifest();
                 addManifest.ID = reader.GetInt32(0);
-                addManifest.Carrier = reader.GetInt32(1);
-                addManifest.Flight = reader.GetInt64(2);
-                addManifest.Aircraft = reader.GetInt64(3);
-                addManifest.From = reader.GetInt32(4);
-                addManifest.To = reader.GetInt32(5);
+                addManifest.Carrier = reader.GetString(1).TrimEnd();
+                addManifest.Flight = reader.GetString(2).TrimEnd();
+                addManifest.Aircraft = reader.GetString(3).TrimEnd();
+                addManifest.From = reader.GetString(4).TrimEnd();
+                addManifest.To = reader.GetString(5).TrimEnd();
                 addManifest.Date = reader.GetDateTime(6);
                 manifests.Add(addManifest);
             }
@@ -74,20 +94,56 @@ namespace Practic_3_curs.Models
             cmd.ExecuteNonQuery();
         }
 
+        private string GenUpdateCommand(Stored_Manifest manifest, IAirportManager airportManager, ICarrierManager carrierManager)
+        {
+            string cmdText = "";
+            // Тип груза
+            if (manifest.Carrier != "")
+                try
+                {
+                    cmdText += ", \"Carrier\" = '" + manifest.Carrier + "'";
+                }
+                catch { }
+            // Вес груза
+            if (manifest.Flight != "")
+                cmdText += ", \"Flight\" = '" + manifest.Flight + "'";
+            // Объём груза
+            if (manifest.Aircraft != "")
+                cmdText += ", \"Aircraft\" = '" + manifest.Aircraft + "'";
+            // Отправитель
+            if (manifest.From != "")
+                try
+                {
+                    cmdText += ", \"From\" = '" + airportManager.GetAirportByName(manifest.From) + "'";
+                }
+                catch { }
+            // Получатель
+            if (manifest.To != "")
+                try
+                {
+                    cmdText += ", \"To\" = '" + airportManager.GetAirportByName(manifest.To) + "'";
+                }
+                catch { }
+            // Объём груза
+            if (manifest.Date != null)
+                cmdText += ", \"Date\" = '" + manifest.Date + "'";
+
+            cmdText = "UPDATE \"Manifest\" SET " + cmdText.Substring(1) + " WHERE \"ID\" = '" + manifest.ID + "'";
+            return cmdText;
+        }
+
+
         /// <summary>
         /// Обновление данных о манифесте
         /// </summary>
         /// <param name="manifest">Новые данные</param>
-        public void Update(Stored_Manifest manifest)
+        public void Update(Stored_Manifest manifest, IAirportManager airportManager, ICarrierManager carrierManager)
         {
             NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
-            cmd.CommandText = "UPDATE \"Manifest\" SET \"Carrier\" = '" + manifest.Carrier
-                + "', \"Aircraft\" = '" + manifest.Aircraft +
-                "', \"From\" = '" + manifest.From + "', \"To\" = '" + manifest.To + "', \"Date\" = '" + manifest.Date + 
-                "' WHERE \"Flight\" = '" + manifest.Flight + "' AND \"Carrier\"" + manifest.Carrier;
+            cmd.CommandText = GenUpdateCommand(manifest, airportManager, carrierManager);
             cmd.ExecuteNonQuery();
         }
     }

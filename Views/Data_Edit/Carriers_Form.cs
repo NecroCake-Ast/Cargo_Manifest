@@ -28,7 +28,10 @@ namespace Practic_3_curs.Views
                 Carriers = Program.CarriersManager.GetAllCarriers();
                 CarriersShow();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Carriers.LoadCarriers " + except.Message);
+            }
         }
 
         private void onMenuShow(object sender, EventArgs e)
@@ -49,7 +52,10 @@ namespace Practic_3_curs.Views
                 Program.CarriersManager.Add(carrier);
                 LoadCarriers();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Carriers.onAddClick " + except.Message);
+            }
         }
 
         private void onUpdateClick(object sender, EventArgs e)
@@ -63,7 +69,10 @@ namespace Practic_3_curs.Views
                 Program.CarriersManager.Update(carrier);
                 LoadCarriers();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Carriers.onUpdateClick " + except.Message);
+            }
         }
 
         private void onRemoveClick(object sender, EventArgs e)
@@ -73,7 +82,10 @@ namespace Practic_3_curs.Views
                 Program.CarriersManager.Remove(Code_Inp.Text);
                 LoadCarriers();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Carriers.onRemoveClick " + except.Message);
+            }
         }
     }
 }

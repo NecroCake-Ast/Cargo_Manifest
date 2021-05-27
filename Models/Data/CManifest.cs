@@ -11,8 +11,8 @@ namespace Practic_3_curs.Models
         public int          ID        { get; set; }  //!< ID
         public int          Version   { get; set; }  //!< Версия
         public CCarrier     Carrier   { get; set; }  //!< Перевозчик
-        public int          Flight    { get; set; }  //!< Номер рейса
-        public int          Aircraft  { get; set; }  //!< Бортовой номер
+        public string       Flight    { get; set; }  //!< Номер рейса
+        public string       Aircraft  { get; set; }  //!< Бортовой номер
         public string       From      { get; set; }  //!< Аэропорт вылета
         public string       To        { get; set; }  //!< Аэропорт назначения
         public DateTime     Date      { get; set; }  //!< Дата и время вылета

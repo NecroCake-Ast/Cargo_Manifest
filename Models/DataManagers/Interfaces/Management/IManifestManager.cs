@@ -17,13 +17,13 @@ namespace Practic_3_curs.Models
         /// Добавление нового манифеста
         /// </summary>
         /// <param name="manifest">Данные нового манифеста</param>
-        void Add(Stored_Manifest manifest);
+        void Add(Stored_Manifest manifest, IAirportManager airportManager, ICarrierManager carrierManager);
 
         /// <summary>
         /// Обновление данных о манифесте
         /// </summary>
         /// <param name="manifest">Новые данные</param>
-        void Update(Stored_Manifest manifest);
+        void Update(Stored_Manifest manifest, IAirportManager airportManager, ICarrierManager carrierManager);
 
         /// <summary>
         /// Удаление информации о манифесте

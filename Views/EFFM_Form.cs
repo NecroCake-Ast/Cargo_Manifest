@@ -27,24 +27,24 @@ namespace Practic_3_curs.Views
         public void SendMessage(List<string> Lines, CManifest Manifest, string To_Address)
         {
             // Откуда отправляется
-            MailAddress fromAddress = new MailAddress("*@mail.ru",
+            MailAddress fromAddress = new MailAddress(Program.MailData.Login,
                 Manifest.Carrier.Code.TrimEnd() + "-" + Manifest.To.TrimEnd());
             // Куда отправляется
             MailAddress toAddress = new MailAddress(To_Address);
             MailMessage m = new MailMessage(fromAddress, toAddress);
             // Тема письма
-            m.Subject = "E-FFM. Рейс" + Manifest.Carrier.Code.TrimEnd() + Manifest.Flight + ". " + Manifest.Date;
+            m.Subject = "E-FFM. Рейс " + Manifest.Carrier.Code.TrimEnd() + Manifest.Flight + ". " + Manifest.Date;
             // Текст письма
             m.Body = "";
             foreach (var res in Lines)
                 m.Body += res + "\n";
             // Адрес smtp-сервера и порт, с которого будем отправлять письмо
-            SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587);
+            SmtpClient smtp = new SmtpClient(Program.MailData.Host, Program.MailData.Port);
             // Логин и пароль
-            smtp.Credentials = new NetworkCredential(fromAddress.Address, "*");
+            smtp.Credentials = new NetworkCredential(fromAddress.Address, Program.MailData.Password);
             smtp.Timeout = 10000;
             smtp.EnableSsl = true;
-            smtp.Send(m);
+             smtp.Send(m);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Practic_3_curs.Views
                 CargoManifest.Add(curCargo.Waybill.Code + "-" + curCargo.Waybill.Num + ""
                     + manifest.From + "" + manifest.To + "/T"
                     + curCargo.PlaceCnt + "K" + curCargo.Weight
-                    + "M" + curCargo.Volume + "/" + curCargo.Type.TrimEnd().ToUpper());
+                    + "MC" + curCargo.Volume + "/" + curCargo.Type.TrimEnd().ToUpper());
             CargoManifest.Add("LAST");
             return CargoManifest;
         }
@@ -123,8 +123,6 @@ namespace Practic_3_curs.Views
         /// <summary>
         /// Нажатие на кнопку формирования документа .docx
         /// </summary>
-        /// TODO:
-        ///      Много кода. Мб отдельный класс сделать для этого? (Necrocake, 03.02.2021)
         private void CreateDoc_Click(object sender, EventArgs e)
         {
             DateTime date = DateTime.Parse(EnterDate.Text);
@@ -135,20 +133,28 @@ namespace Practic_3_curs.Views
                 CManifest manifest = Program.ManifestFinder.FindManifest(date, flight.CarrierCode, flight.Number);
 
                 CDocumentGenerator generator = new CDocumentGenerator();
-                generator.GenDoc(manifest, flight, date);
-
-                MessageBox.Show(
-                    date.Day + "." + date.Month + "." + date.Year + "-" + flight.FullName + ".docx успешно сформирован",
-                    "Message",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information,
-                    MessageBoxDefaultButton.Button1,
-                    MessageBoxOptions.DefaultDesktopOnly);
+                if (generator.GenDoc(manifest, flight, date))
+                    MessageBox.Show(
+                        date.Day + "." + date.Month + "." + date.Year + "-" + flight.FullName + ".docx успешно сформирован",
+                        "Message",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information,
+                        MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.DefaultDesktopOnly);
+                else
+                    MessageBox.Show(
+                        "Не удалось создать файл " + date.Day + "." + date.Month + "." + date.Year + "-" + flight.FullName + ".docx"
+                        + "\nВозможно файл с таким названием используется другой программой",
+                        "Message",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error,
+                        MessageBoxDefaultButton.Button1,
+                        MessageBoxOptions.DefaultDesktopOnly);
             }
             else
             {
                 MessageBox.Show(
-                   "Не удалось создать файл",
+                   "Не удалось сформировать Cargo Manifest. Проверьте правильность указанных данных",
                    "Message",
                    MessageBoxButtons.OK,
                    MessageBoxIcon.Error,
@@ -170,7 +176,7 @@ namespace Practic_3_curs.Views
             EnterFlight.SelectedItem = null;
             EnterFlight.Items.Clear();
             foreach (var curFlight in Flights)
-                EnterFlight.Items.Add(curFlight.FullName);
+                EnterFlight.Items.Add(curFlight.FullName.TrimEnd());
         }
 
         private void onMenuShow(object sender, EventArgs e)

@@ -1,7 +1,6 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 /// <summary>
 /// Summary description for PGDBAirportManager
@@ -26,7 +25,7 @@ namespace Practic_3_curs.Models
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
-            cmd.CommandText = "INSERT INTO \"Airport\" (\"En_Name\", \"Ru_Name\") "
+            cmd.CommandText = "INSERT INTO \"Airport\" (\"EN_Name\", \"RU_Name\") "
                             + "VALUES ('" + airport.En_Name + "', '" + airport.Ru_Name + "')";
             cmd.ExecuteNonQuery();
         }
@@ -35,23 +34,38 @@ namespace Practic_3_curs.Models
         /// Получение списка аэропортов
         /// </summary>
         /// <returns>Список аэропортов</returns>
-        public List<Stored_Airport> GetAllAirport()
+        public List<Stored_Airport> GetAllAirports()
         {
             List<Stored_Airport> airports = new List<Stored_Airport>();
             NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
             DB.Open();
             NpgsqlCommand cmd = new NpgsqlCommand();
             cmd.Connection = DB;
-            cmd.CommandText = "SELECT \"EN_Name\", \"RU_Name\" FROM \"Airport\" ORDER BY \"ID\"";
+            cmd.CommandText = "SELECT \"ID\", \"EN_Name\", \"RU_Name\" FROM \"Airport\" ORDER BY \"ID\"";
             NpgsqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Stored_Airport addAirport = new Stored_Airport();
-                addAirport.En_Name = reader.GetString(0);
-                addAirport.Ru_Name = reader.GetString(1);
+                addAirport.ID = reader.GetInt32(0);
+                addAirport.En_Name = reader.GetString(1);
+                addAirport.Ru_Name = reader.GetString(2);
                 airports.Add(addAirport);
             }
             return airports;
+        }
+
+        public int GetAirportByName(string name)
+        {
+            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+            DB.Open();
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            cmd.Connection = DB;
+            cmd.CommandText = "SELECT \"ID\" FROM \"Airport\" WHERE \"RU_Name\" = '" + name
+                + "' OR \"EN_Name\" = '" + name + "'";
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+                return reader.GetInt32(0);
+            throw new Exception("Перевозчика с заданным ID не существует");
         }
 
         /// <summary>
@@ -74,13 +88,24 @@ namespace Practic_3_curs.Models
         /// <param name="airport">Новые данные</param>
         public void Update(Stored_Airport airport)
         {
-            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
-            DB.Open();
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.Connection = DB;
-            cmd.CommandText = "UPDATE \"Airport\" SET \"En_Mane\" = '" + airport.En_Name
-                + "', \"RU_Name\" = '" + airport.Ru_Name + "' WHERE \"EN_Name\" = '" + airport.En_Name + "'";
-            cmd.ExecuteNonQuery();
+            if (airport.Ru_Name != "" || airport.En_Name != "")
+            {
+                NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+                DB.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand();
+                cmd.Connection = DB;
+                cmd.CommandText = "UPDATE \"Airport\" SET";
+                if (airport.En_Name != "")
+                {
+                    cmd.CommandText += " \"EN_Name\" = '" + airport.En_Name + "'";
+                    if (airport.Ru_Name != "")
+                        cmd.CommandText += ",";
+                }
+                if (airport.Ru_Name != "")
+                    cmd.CommandText += " \"RU_Name\" = '" + airport.Ru_Name + "'";
+                cmd.CommandText += " WHERE \"ID\" = " + airport.ID;
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

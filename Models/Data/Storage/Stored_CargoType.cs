@@ -5,6 +5,7 @@
     /// </summary>
     public class Stored_CargoType
     {
+        public int    ID      { get; set; }   //!< ID типа товара
         public string En_Name { get; set; }   //!< Наименование на английском
         public string Ru_Name { get; set; }   //!< Наименование на русском 
     }

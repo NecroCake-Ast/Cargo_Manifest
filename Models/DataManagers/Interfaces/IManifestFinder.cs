@@ -15,7 +15,7 @@ namespace Practic_3_curs.Models
 		/// <param name="carrier">Код перевозчика</param>
 		/// <param name="flight">Номер рейса</param>
 		/// <returns>Найденный манифест</returns>
-        CManifest FindManifest(DateTime date, string carrier, int flight);
+        CManifest FindManifest(DateTime date, string carrier, string flight);
 
         /// <summary>
         /// Поиск всех рейсов за заданный день
@@ -23,5 +23,11 @@ namespace Practic_3_curs.Models
         /// <param name="date">Дата, по которой идёт поиск</param>
         /// <returns>Список рейсов</returns>
         List<CFlight> FindFlights(DateTime date);
+
+        /// <summary>
+        /// Проверка соединения
+        /// </summary>
+        /// <returns>Можно ли выполнять обработку данных</returns>
+        bool Ping();
     }
 }

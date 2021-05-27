@@ -8,13 +8,13 @@ namespace Practic_3_curs.Models
         /// Добавление новой накладной
         /// </summary>
         /// <param name="cargotype">Данные новой накладной</param>
-        void Add(CWaybill waybill);
+        void Add(Stored_Waybill waybill, ICargoTypeManager typeManager, IClientManager clientManager);
 
         /// <summary>
         /// Получение списка накладных
         /// </summary>
         /// <returns>Список накладных</returns>
-        List<CWaybill> GetAllWaybill();
+        List<Stored_Waybill> GetAllWaybills();
 
         /// <summary>
         /// Удаление информации о накладных
@@ -26,6 +26,6 @@ namespace Practic_3_curs.Models
         /// Обновление данных о накладных
         /// </summary>
         /// <param name="waybill">Новые данные</param>
-        void Update(CWaybill waybill);
+        void Update(Stored_Waybill waybill, ICargoTypeManager typeManager, IClientManager clientManager);
     }
 }

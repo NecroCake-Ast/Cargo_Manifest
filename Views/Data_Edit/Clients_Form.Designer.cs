@@ -39,7 +39,7 @@ namespace Practic_3_curs.Views
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Menu_btn = new System.Windows.Forms.Button();
-            this.Carriers_Field = new System.Windows.Forms.TextBox();
+            this.Clients_Field = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Remove_btn
@@ -141,26 +141,26 @@ namespace Practic_3_curs.Views
             this.Menu_btn.UseVisualStyleBackColor = true;
             this.Menu_btn.Click += new System.EventHandler(this.onMenuShow);
             // 
-            // Carriers_Field
+            // Clients_Field
             // 
-            this.Carriers_Field.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Carriers_Field.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Carriers_Field.Font = new System.Drawing.Font("Lucida Console", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Carriers_Field.Location = new System.Drawing.Point(13, 197);
-            this.Carriers_Field.Multiline = true;
-            this.Carriers_Field.Name = "Carriers_Field";
-            this.Carriers_Field.ReadOnly = true;
-            this.Carriers_Field.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Carriers_Field.Size = new System.Drawing.Size(548, 241);
-            this.Carriers_Field.TabIndex = 21;
-            this.Carriers_Field.TabStop = false;
+            this.Clients_Field.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Clients_Field.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Clients_Field.Font = new System.Drawing.Font("Lucida Console", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Clients_Field.Location = new System.Drawing.Point(13, 197);
+            this.Clients_Field.Multiline = true;
+            this.Clients_Field.Name = "Clients_Field";
+            this.Clients_Field.ReadOnly = true;
+            this.Clients_Field.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.Clients_Field.Size = new System.Drawing.Size(548, 241);
+            this.Clients_Field.TabIndex = 21;
+            this.Clients_Field.TabStop = false;
             // 
             // Clients_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.Carriers_Field);
+            this.Controls.Add(this.Clients_Field);
             this.Controls.Add(this.Remove_btn);
             this.Controls.Add(this.Update_btn);
             this.Controls.Add(this.Add_btn);
@@ -172,7 +172,7 @@ namespace Practic_3_curs.Views
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Menu_btn);
             this.Name = "Clients_Form";
-            this.Text = "Client_Form";
+            this.Text = "Клиенты";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -190,6 +190,6 @@ namespace Practic_3_curs.Views
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button Menu_btn;
-        private System.Windows.Forms.TextBox Carriers_Field;
+        private System.Windows.Forms.TextBox Clients_Field;
     }
 }

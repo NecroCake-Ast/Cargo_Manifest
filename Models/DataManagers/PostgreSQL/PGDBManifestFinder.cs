@@ -23,7 +23,7 @@ namespace Practic_3_curs.Models
 		/// <param name="flight">Номер рейса</param>
 		/// <returns>Код селекта манифеста</returns>
 		/// TODO: Возможно это стоит перетащить в базу, как функцию. Надо уточнять
-		string Manifest_Select_Code(DateTime date, string carrier, int flight)
+		string Manifest_Select_Code(DateTime date, string carrier, string flight)
 		{
 			return (
 					"SELECT \"Manifest\".\"ID\", \"Carrier\".\"Code\","
@@ -53,7 +53,7 @@ namespace Practic_3_curs.Models
 		/// <param name="carrier">Код перевозчика</param>
 		/// <param name="flight">Номер рейса</param>
 		/// <returns>Манифест (без указания грузов)</returns>
-		public CManifest LoadManifest(DateTime date, string carrier, int flight)
+		public CManifest LoadManifest(DateTime date, string carrier, string flight)
 		{
 			CManifest manifest = new CManifest();
 			NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
@@ -68,8 +68,8 @@ namespace Practic_3_curs.Models
 				manifest.Carrier.Code = dataReader.GetString(1);
 				manifest.Carrier.Name = dataReader.GetString(2);
 				manifest.Carrier.Mail = dataReader.GetString(3);
-				manifest.Flight = dataReader.GetInt32(4);
-				manifest.Aircraft = dataReader.GetInt32(5);
+				manifest.Flight = dataReader.GetString(4).TrimEnd();
+				manifest.Aircraft = dataReader.GetString(5).TrimEnd();
 				manifest.From = dataReader.GetString(6);
 				manifest.To = dataReader.GetString(7);
 				manifest.Date = dataReader.GetDateTime(8);
@@ -152,7 +152,7 @@ namespace Practic_3_curs.Models
 		/// <param name="carrier">Код перевозчика</param>
 		/// <param name="flight">Номер рейса</param>
 		/// <returns>Найденный манифест</returns>
-		public CManifest FindManifest(DateTime date, string carrier, int flight)
+		public CManifest FindManifest(DateTime date, string carrier, string flight)
 		{
 			CManifest manifest = LoadManifest(date, carrier, flight);
 			LoadCargos(manifest);
@@ -193,8 +193,23 @@ namespace Practic_3_curs.Models
 			cmd.CommandText = Flights_Select_Code(date);
 			NpgsqlDataReader dataReader = cmd.ExecuteReader();
 			while (dataReader.Read())
-				flights.Add(new CFlight(dataReader.GetString(0), dataReader.GetInt32(1)));
+				flights.Add(new CFlight(dataReader.GetString(0), dataReader.GetString(1)));
 			return flights;
         }
-	}
+
+        public bool Ping()
+        {
+			try
+			{
+				NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+				DB.Open();
+				NpgsqlCommand cmd = new NpgsqlCommand();
+				cmd.Connection = DB;
+				cmd.CommandText = "SELECT COUNT(*)";
+				cmd.ExecuteNonQuery();
+				return true;
+			} catch { }
+			return false;
+		}
+    }
 }
