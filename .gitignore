@@ -6,4 +6,4 @@
 **/.vscode
 **/*.pubxml
 **/*.pubxml.user
-**/Settings/*.log
+**/Settings
