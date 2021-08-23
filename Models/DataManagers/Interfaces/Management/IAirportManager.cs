@@ -11,7 +11,9 @@ namespace Practic_3_curs.Models
         /// Получение списка аэропортов
         /// </summary>
         /// <returns>Список аэропортов</returns>
-        List<Stored_Airport> GetAllAirport();
+        List<Stored_Airport> GetAllAirports();
+
+        int GetAirportByName(string name);
 
         /// <summary>
         /// Добавление нового аэропорта

@@ -140,14 +140,14 @@
             this.Remove_btn.UseVisualStyleBackColor = true;
             this.Remove_btn.Click += new System.EventHandler(this.onRemoveClick);
             // 
-            // Carriers_Field
+            // Waybills_Field
             // 
             this.Carriers_Field.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.Carriers_Field.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.Carriers_Field.Font = new System.Drawing.Font("Lucida Console", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Carriers_Field.Location = new System.Drawing.Point(12, 197);
             this.Carriers_Field.Multiline = true;
-            this.Carriers_Field.Name = "Carriers_Field";
+            this.Carriers_Field.Name = "Clients_Field";
             this.Carriers_Field.ReadOnly = true;
             this.Carriers_Field.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Carriers_Field.Size = new System.Drawing.Size(548, 241);

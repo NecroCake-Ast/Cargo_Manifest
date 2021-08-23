@@ -16,9 +16,9 @@ namespace Practic_3_curs.Views
 
         void ClientsShow()
         {
-            Carriers_Field.Text = "";
+            Clients_Field.Text = "";
             foreach (Stored_Client client in Clients)
-                Carriers_Field.Text += client.ID.ToString().PadRight(9) + "\"" + client.Name + "\". Телефон: " + client.Phone + "\r\n";
+                Clients_Field.Text += client.ID.ToString().PadRight(9) + "\"" + client.Name + "\". Телефон: " + client.Phone + "\r\n";
         }
 
         public void LoadClients()
@@ -28,13 +28,16 @@ namespace Practic_3_curs.Views
                 Clients = Program.ClientManager.GetAllClients();
                 ClientsShow();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Clients.LoadClients " + except.Message);
+            }
         }
 
         private void onMenuShow(object sender, EventArgs e)
         {
             Clients.Clear();
-            Carriers_Field.Text = "";
+            Clients_Field.Text = "";
             ((MainContainer)MdiParent).Menu_Show();
         }
 
@@ -43,13 +46,15 @@ namespace Practic_3_curs.Views
             try
             {
                 Stored_Client client = new Stored_Client();
-                client.ID = int.Parse(ID_Inp.Text);
                 client.Name = Name_Inp.Text;
                 client.Phone = Phone_Inp.Text;
                 Program.ClientManager.Add(client);
                 LoadClients();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Clients.onAddClick " + except.Message);
+            }
         }
 
         private void onUpdateClick(object sender, EventArgs e)
@@ -63,7 +68,10 @@ namespace Practic_3_curs.Views
                 Program.ClientManager.Update(client);
                 LoadClients();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Clients.onUpdateClick " + except.Message);
+            }
         }
 
         private void onRemoveClick(object sender, EventArgs e)
@@ -73,7 +81,10 @@ namespace Practic_3_curs.Views
                 Program.ClientManager.Remove(int.Parse(ID_Inp.Text));
                 LoadClients();
             }
-            catch { }
+            catch (Exception except)
+            {
+                Program.Log("Clients.onRemoveClick " + except.Message);
+            }
         }
     }
 }

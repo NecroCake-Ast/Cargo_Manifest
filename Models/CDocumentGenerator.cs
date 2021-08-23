@@ -1,4 +1,5 @@
 ﻿using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.XWPF.Model;
 using NPOI.XWPF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,17 @@ namespace Practic_3_curs.Models
 	{
 		void AddTableHeader(XWPFTable table)
 		{
-			table.Width = 5500;
-
-			XWPFTableRow tableRowOne = table.GetRow(0);
-			tableRowOne.GetCell(0).SetText("AIR WAYBILL NUMBER");
-			tableRowOne.AddNewTableCell().SetText("NR OF PACK");
-			tableRowOne.AddNewTableCell().SetText("NATURE OF GODS");
-			tableRowOne.AddNewTableCell().SetText("CROSS WEIGHT");
-			tableRowOne.AddNewTableCell().SetText("ORIGIN DEST");
-			tableRowOne.AddNewTableCell().SetText("FOR OFFICIAL USE ONLY");
-			tableRowOne.AddNewTableCell().SetText("REMARK");
+			XWPFTableRow Headers = table.GetRow(0);
+			Headers.GetCell(0).SetText("AIR WAYBILL");
+			XWPFParagraph paragraph = Headers.GetCell(0).AddParagraph();
+			XWPFRun run = paragraph.CreateRun();
+			run.SetText("NUMBER");
+			Headers.AddNewTableCell().SetText("NR OF PACK");
+			Headers.AddNewTableCell().SetText("NATURE OF GODS");
+			Headers.AddNewTableCell().SetText("CROSS WEIGHT");
+			Headers.AddNewTableCell().SetText("ORIGIN DEST");
+			Headers.AddNewTableCell().SetText("FOR OFFICIAL USE ONLY");
+			Headers.AddNewTableCell().SetText("REMARK\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0");
 		}
 
 		void AddWaybills(XWPFTableCell tableCol, CManifest manifest)
@@ -34,7 +36,7 @@ namespace Practic_3_curs.Models
 			}
 			XWPFParagraph LastPar = tableCol.AddParagraph();
 			XWPFRun LastRun = LastPar.CreateRun();
-			LastRun.SetText("ULD TOTAL");
+			LastRun.SetText("TOTAL");
 		}
 
 		void AddPlaces(XWPFTableCell tableCol, CManifest manifest)
@@ -71,15 +73,40 @@ namespace Practic_3_curs.Models
 			for (int i = 0; i < manifest.Cargos.Count; i++)
 			{
 				XWPFParagraph newPar = tableCell.AddParagraph();
-				newPar.Alignment = ParagraphAlignment.RIGHT;
 				XWPFRun parRun = newPar.CreateRun();
 				parRun.SetText(manifest.Cargos[i].Weight + "KG");
 				SumWeight += manifest.Cargos[i].Weight;
 			}
 			XWPFParagraph CellLastPar = tableCell.AddParagraph();
-			CellLastPar.Alignment = ParagraphAlignment.RIGHT;
 			XWPFRun CellLastRun = CellLastPar.CreateRun();
 			CellLastRun.SetText(SumWeight + "KG");
+		}
+
+		void AddHeader(XWPFDocument doc)
+        {
+			XWPFHeaderFooterPolicy policy = doc.CreateHeaderFooterPolicy();
+			XWPFHeader header = policy.CreateHeader(ST_HdrFtr.@default);
+			XWPFParagraph paragraph = header.CreateParagraph();
+			paragraph.Alignment = ParagraphAlignment.CENTER;
+			XWPFRun run = paragraph.CreateRun();
+			run.SetText("CARGO MANIFEST");
+		}
+
+		void AddFooter(XWPFDocument doc)
+		{
+			XWPFHeaderFooterPolicy policy = doc.CreateHeaderFooterPolicy();
+			XWPFFooter footer = policy.CreateFooter(ST_HdrFtr.@default);
+			XWPFParagraph paragraph = footer.GetParagraphArray(0);
+			XWPFRun run = paragraph.CreateRun();
+			run.FontFamily = "Times New Roman";
+			run.FontSize = 12;
+			run.SetText("______________________________________________________________________________________________");
+			paragraph = footer.CreateParagraph();
+			run = paragraph.CreateRun();
+			run.SetText("Средства пакетирования загружены на борт...");
+			paragraph = footer.CreateParagraph();
+			run = paragraph.CreateRun();
+			run.SetText("Старший на рейсе ВМТС-грузчик ____________________(подпись) __________ (ФИО)_________(дата)");
 		}
 
 		public bool GenDoc(CManifest manifest, CFlight flight, DateTime date)
@@ -87,6 +114,15 @@ namespace Practic_3_curs.Models
 			try {
 				//Create document
 				XWPFDocument doc = new XWPFDocument();
+				doc.Document.body.AddNewSectPr();
+				CT_SectPr sectPr = doc.Document.body.sectPr;
+
+				AddHeader(doc);
+				AddFooter(doc);
+
+				// Отступы
+				sectPr.pgMar.left = 284;
+				sectPr.pgMar.right = 300;
 
 				//Create info about manifest
 				XWPFParagraph FIRSTLINE = doc.CreateParagraph();
@@ -127,35 +163,6 @@ namespace Practic_3_curs.Models
 				tableRowThree.GetCell(1).SetText("                  ");
 				tableRowThree.GetCell(2).SetText("                  ");
 
-
-				doc.Document.body.sectPr = new CT_SectPr();
-				CT_SectPr secPr = doc.Document.body.sectPr;
-
-				//Create header and set its text
-				CT_Hdr header = new CT_Hdr();
-				header.AddNewP().AddNewR().AddNewT().Value = "CARGO MANIFEST";
-				//Create footer and set its text
-				CT_Ftr footer = new CT_Ftr();
-				string Footer = "___________________________________________________________________________\n"
-					+ "Средства пакетирования загружены на борт..."
-					+ "Старший на рейсе ВМТС-грузчик ____________________(подпись) __________ (ФИО)_________(дата)\n";
-				footer.AddNewP().AddNewR().AddNewT().Value = Footer;
-				//Create the relation of header
-				XWPFRelation relation1 = XWPFRelation.HEADER;
-				XWPFHeader myHeader = (XWPFHeader)doc.CreateRelationship(relation1, XWPFFactory.GetInstance(), doc.HeaderList.Count + 1);
-				//Create the relation of footer
-				XWPFRelation relation2 = XWPFRelation.FOOTER;
-				XWPFFooter myFooter = (XWPFFooter)doc.CreateRelationship(relation2, XWPFFactory.GetInstance(), doc.FooterList.Count + 1);
-				//Set the header
-				myHeader.SetHeaderFooter(header);
-				CT_HdrFtrRef myHeaderRef = secPr.AddNewHeaderReference();
-				myHeaderRef.type = ST_HdrFtr.@default;
-				myHeaderRef.id = myHeader.GetPackageRelationship().Id;
-				//Set the footer
-				myFooter.SetHeaderFooter(footer);
-				CT_HdrFtrRef myFooterRef = secPr.AddNewFooterReference();
-				myFooterRef.type = ST_HdrFtr.@default;
-				myFooterRef.id = myFooter.GetPackageRelationship().Id;
 				//Save the file
 				using (FileStream stream = File.Create(date.Day + "." + date.Month + "." + date.Year + "-" + flight.FullName + ".docx"))
 				{

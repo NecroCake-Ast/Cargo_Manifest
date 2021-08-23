@@ -12,12 +12,12 @@ namespace Practic_3_curs.Views
 
         private void onManifestsShow(object sender, EventArgs e)
         {
-
+            ((MainContainer)MdiParent).Manifests_Show();
         }
 
         private void onWaybillsShow(object sender, EventArgs e)
         {
-            
+            ((MainContainer)MdiParent).Waybills_Show();
         }
 
         private void onClientsShow(object sender, EventArgs e)
@@ -32,12 +32,12 @@ namespace Practic_3_curs.Views
 
         private void onAirportsShow(object sender, EventArgs e)
         {
-
+            ((MainContainer)MdiParent).Airports_Show();
         }
 
         private void onCargoTypesShow(object sender, EventArgs e)
         {
-
+            ((MainContainer)MdiParent).CargoTypes_Show();
         }
 
         private void onEFFMGen(object sender, EventArgs e)

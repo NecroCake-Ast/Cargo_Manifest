@@ -11,7 +11,7 @@ namespace Practic_3_curs.Models
         /// Получение списка товаров
         /// </summary>
         /// <returns>Список товаров</returns>
-        List<Stored_CargoType> GetAllCargoType();
+        List<Stored_CargoType> GetAllCargoTypes();
 
         /// <summary>
         /// Добавление нового товара
@@ -30,5 +30,12 @@ namespace Practic_3_curs.Models
         /// </summary>
         /// <param name="id">Код удаляемого товара</param>
         void Remove(int id);
+
+        /// <summary>
+        /// Возвращает ID типа груза по названию
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns>ID типа груза</returns>
+        int GetTypeByName(string Name);
     }
 }

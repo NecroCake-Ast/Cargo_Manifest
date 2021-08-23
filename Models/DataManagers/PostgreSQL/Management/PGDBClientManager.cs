@@ -22,13 +22,16 @@ namespace Practic_3_curs.Models
         /// <param name="client">Данные нового клиента</param>
         public void Add(Stored_Client client)
         {
-            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
-            DB.Open();
-            NpgsqlCommand cmd = new NpgsqlCommand();
-            cmd.Connection = DB;
-            cmd.CommandText = "INSERT INTO \"Client\" (\"Name\", \"Phone\") "
-                            + "VALUES ('" + client.Name + "', '" + client.Phone + ")";
-            cmd.ExecuteNonQuery();
+            if (client.Name != "" && client.Phone != "")
+            {
+                NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+                DB.Open();
+                NpgsqlCommand cmd = new NpgsqlCommand();
+                cmd.Connection = DB;
+                cmd.CommandText = "INSERT INTO \"Client\" (\"Name\", \"Phone\") "
+                                + "VALUES ('" + client.Name + "', '" + client.Phone + "')";
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -53,6 +56,24 @@ namespace Practic_3_curs.Models
                 clients.Add(addClient);
             }
             return clients;
+        }
+
+        /// <summary>
+        /// Возвращает ID клиента по его наименованию
+        /// </summary>
+        /// <param name="Name">Наименование клиента</param>
+        /// <returns>ID клиента</returns>
+        public int GetClientByName(string Name)
+        {
+            NpgsqlConnection DB = new NpgsqlConnection(Connect_Setting);
+            DB.Open();
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            cmd.Connection = DB;
+            cmd.CommandText = "SELECT \"ID\" FROM \"Client\" WHERE \"Name\" = '" + Name + "'";
+            NpgsqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+                return reader.GetInt32(0);
+            throw new Exception("Клиента с таким наименованием не существует");
         }
 
         /// <summary>

@@ -1,0 +1,5 @@
+16.03.2021 0:46:16: Не удалось получить доступ к базе данных.
+16.03.2021 11:20:50: The path must be absolute. (Parameter 'root')
+16.03.2021 11:30:39: Bad sequence of commands. The server response was: Administrative prohibition -- authorization required.  Users in your domain are not allowed to send email without authorization.  See http://help.mail.ru/mail-help/mailer/popsmtp for details.
+16.03.2021 11:37:41: 42601: ошибка синтаксиса (примерное положение: "52090556")
+16.03.2021 12:11:49: Waybills.onAddClick 23505: повторяющееся значение ключа нарушает ограничение уникальности "Waybill_pkey"

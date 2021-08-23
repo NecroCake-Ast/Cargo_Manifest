@@ -8,12 +8,12 @@ namespace Practic_3_curs.Models
     /// </summary>
     public class Stored_Manifest
     {
-        public int      ID       { get; set; }   //!< ID декларации
-        public int      Carrier  { get; set; }   //!< Код перевозчика
-        public long     Flight   { get; set; }   //!< Рейс
-        public long     Aircraft { get; set; }   //!< Бортовой номер
-        public int      From     { get; set; }   //!< ID аэропорта вылета
-        public int      To       { get; set; }   //!< ID аэропорта прибытия
-        public DateTime Date     { get; set; }   //!< Дата и время вылета
+        public int       ID       { get; set; }   //!< ID декларации
+        public string    Carrier  { get; set; }   //!< Наименование перевозчика
+        public string    Flight   { get; set; }   //!< Рейс
+        public string    Aircraft { get; set; }   //!< Бортовой номер
+        public string    From     { get; set; }   //!< Название аэропорта вылета
+        public string    To       { get; set; }   //!< Название аэропорта прибытия
+        public DateTime? Date     { get; set; }   //!< Дата и время вылета
     }
 }

@@ -30,5 +30,12 @@ namespace Practic_3_curs.Models
         /// </summary>
         /// <param name="id">Код удаляемого клиента</param>
         void Remove(int id);
+
+        /// <summary>
+        /// Возвращает ID клиента по его наименованию
+        /// </summary>
+        /// <param name="Name">Наименование клиента</param>
+        /// <returns>ID клиента</returns>
+        int GetClientByName(string Name);
     }
 }
