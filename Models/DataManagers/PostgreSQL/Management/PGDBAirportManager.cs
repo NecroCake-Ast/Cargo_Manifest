@@ -28,6 +28,7 @@ namespace Practic_3_curs.Models
             cmd.CommandText = "INSERT INTO \"Airport\" (\"EN_Name\", \"RU_Name\") "
                             + "VALUES ('" + airport.En_Name + "', '" + airport.Ru_Name + "')";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace Practic_3_curs.Models
                 addAirport.Ru_Name = reader.GetString(2);
                 airports.Add(addAirport);
             }
+            DB.Close();
             return airports;
         }
 
@@ -65,6 +67,7 @@ namespace Practic_3_curs.Models
             NpgsqlDataReader reader = cmd.ExecuteReader();
             if (reader.Read())
                 return reader.GetInt32(0);
+            DB.Close();
             throw new Exception("Перевозчика с заданным ID не существует");
         }
 
@@ -80,6 +83,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = "DELETE FROM \"Airport\" WHERE \"ID\" = '" + id + "'";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -104,6 +108,7 @@ namespace Practic_3_curs.Models
                 if (airport.Ru_Name != "")
                     cmd.CommandText += " \"RU_Name\" = '" + airport.Ru_Name + "'";
                 cmd.CommandText += " WHERE \"ID\" = " + airport.ID;
+                DB.Close();
                 cmd.ExecuteNonQuery();
             }
         }

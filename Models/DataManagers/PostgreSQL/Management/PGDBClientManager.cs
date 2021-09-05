@@ -31,6 +31,7 @@ namespace Practic_3_curs.Models
                 cmd.CommandText = "INSERT INTO \"Client\" (\"Name\", \"Phone\") "
                                 + "VALUES ('" + client.Name + "', '" + client.Phone + "')";
                 cmd.ExecuteNonQuery();
+                DB.Close();
             }
         }
 
@@ -55,6 +56,7 @@ namespace Practic_3_curs.Models
                 addClient.Phone = reader.GetString(2).TrimEnd();
                 clients.Add(addClient);
             }
+            DB.Close();
             return clients;
         }
 
@@ -71,6 +73,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = "SELECT \"ID\" FROM \"Client\" WHERE \"Name\" = '" + Name + "'";
             NpgsqlDataReader reader = cmd.ExecuteReader();
+            DB.Close();
             if (reader.Read())
                 return reader.GetInt32(0);
             throw new Exception("Клиента с таким наименованием не существует");
@@ -88,6 +91,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = "DELETE FROM \"Client\" WHERE \"ID\" = '" + id + "'";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -113,6 +117,7 @@ namespace Practic_3_curs.Models
                     cmd.CommandText += " \"Phone\" = '" + client.Phone + "'"; 
                 cmd.CommandText += " WHERE \"ID\" = '" + client.ID + "'";
                 cmd.ExecuteNonQuery();
+                DB.Close();
             }
         }
     }

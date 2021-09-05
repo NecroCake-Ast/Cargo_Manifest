@@ -74,6 +74,7 @@ namespace Practic_3_curs.Models
 				manifest.To = dataReader.GetString(7);
 				manifest.Date = dataReader.GetDateTime(8);
 			}
+			DB.Close();
 			return manifest;
 		}
 
@@ -125,6 +126,7 @@ namespace Practic_3_curs.Models
 				cargo.Recipient = dataReader.GetString(7);
 				manifest.Cargos.Add(cargo);
 			}
+			DB.Close();
 		}
 
 		/// <summary>
@@ -143,6 +145,7 @@ namespace Practic_3_curs.Models
 				manifest.Version = dataReader.GetInt32(0) + 1;
 			else
 				manifest.Version = 1;
+			DB.Close();
 		}
 
 		/// <summary>
@@ -194,6 +197,7 @@ namespace Practic_3_curs.Models
 			NpgsqlDataReader dataReader = cmd.ExecuteReader();
 			while (dataReader.Read())
 				flights.Add(new CFlight(dataReader.GetString(0), dataReader.GetString(1)));
+			DB.Close();
 			return flights;
         }
 
@@ -207,6 +211,7 @@ namespace Practic_3_curs.Models
 				cmd.Connection = DB;
 				cmd.CommandText = "SELECT COUNT(*)";
 				cmd.ExecuteNonQuery();
+				DB.Close();
 				return true;
 			} catch { }
 			return false;

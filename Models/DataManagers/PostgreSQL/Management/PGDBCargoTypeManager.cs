@@ -29,6 +29,7 @@ namespace Practic_3_curs.Models
             cmd.CommandText = "INSERT INTO \"Cargo_Type\" (\"EN_Name\", \"RU_Name\") "
                             + "VALUES ('" + cargotype.En_Name + "', '" + cargotype.Ru_Name + "')";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace Practic_3_curs.Models
                 addType.Ru_Name = reader.GetString(2);
                 cargotypes.Add(addType);
             }
+            DB.Close();
             return cargotypes;
         }
 
@@ -69,6 +71,7 @@ namespace Practic_3_curs.Models
             cmd.CommandText = "SELECT \"ID\" FROM \"Cargo_Type\" WHERE \"RU_Name\" = '" + Name
                 + "' OR \"EN_Name\" = '" + Name + "'";
             NpgsqlDataReader reader = cmd.ExecuteReader();
+            DB.Close();
             if (reader.Read())
                 return reader.GetInt32(0);
             throw new Exception("Типа груза с таким названием не существует");
@@ -86,6 +89,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = "DELETE FROM \"Cargo_Type\" WHERE \"ID\" = " + id;
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -111,6 +115,7 @@ namespace Practic_3_curs.Models
                     cmd.CommandText += "\"RU_Name\" = '" + cargotype.Ru_Name + "'";
                 cmd.CommandText += " WHERE \"ID\" = " + cargotype.ID;
                 cmd.ExecuteNonQuery();
+                DB.Close();
             }
         }
     }

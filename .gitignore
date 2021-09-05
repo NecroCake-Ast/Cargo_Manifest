@@ -4,3 +4,6 @@
 **/.directory
 **/.vs
 **/.vscode
+**/*.pubxml
+**/*.pubxml.user
+**/Settings
