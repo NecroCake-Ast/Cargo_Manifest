@@ -31,6 +31,7 @@ namespace Practic_3_curs.Models
                             + manifest.Aircraft + "', '" + airportManager.GetAirportByName(manifest.From) + "', '"
                             + airportManager.GetAirportByName(manifest.To) + "', '" + manifest.Date + "')";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -77,6 +78,7 @@ namespace Practic_3_curs.Models
                 addManifest.Date = reader.GetDateTime(6);
                 manifests.Add(addManifest);
             }
+            DB.Close();
             return manifests;
         }
 
@@ -92,6 +94,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = "DELETE FROM \"Manifest\" WHERE \"ID\" = '" + id + "'";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         private string GenUpdateCommand(Stored_Manifest manifest, IAirportManager airportManager, ICarrierManager carrierManager)
@@ -145,6 +148,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = GenUpdateCommand(manifest, airportManager, carrierManager);
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
     }
 }

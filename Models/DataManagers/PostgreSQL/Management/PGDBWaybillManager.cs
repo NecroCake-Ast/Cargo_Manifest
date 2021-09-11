@@ -50,6 +50,7 @@ namespace Practic_3_curs.Models
                             + "VALUES ('" + waybill.Waybill_Number + "', '" + waybill.Waybill_Code + "', '"
                             + waybill.Manifest_ID + "')";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -72,6 +73,7 @@ namespace Practic_3_curs.Models
                             + recipient + "', '"
                             + waybill.Waybill_Number + "')";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -126,6 +128,7 @@ namespace Practic_3_curs.Models
                 addWaybill.Type = reader.GetString(9).TrimEnd();
                 waybills.Add(addWaybill);
             }
+            DB.Close();
             return waybills;
         }
 
@@ -143,6 +146,7 @@ namespace Practic_3_curs.Models
             cmd.ExecuteNonQuery();
             cmd.CommandText = "DELETE FROM \"Waybill\" WHERE \"Number\" = " + number;
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         private string GenUpdateCommand(Stored_Waybill waybill, ICargoTypeManager typeManager, IClientManager clientManager)
@@ -193,6 +197,7 @@ namespace Practic_3_curs.Models
                 cmd.Connection = DB;
                 cmd.CommandText = GenUpdateCommand(waybill, typeManager, clientManager);
                 cmd.ExecuteNonQuery();
+                DB.Close();
             }
         }
 
@@ -207,6 +212,7 @@ namespace Practic_3_curs.Models
                 cmd.CommandText = "UPDATE \"Waybill\" SET \"Manifest\" = '" + waybill.Manifest_ID + "' "
                                 + "WHERE \"Number = \"" + waybill.Waybill_Number;
                 cmd.ExecuteNonQuery();
+                DB.Close();
             }
         }
 

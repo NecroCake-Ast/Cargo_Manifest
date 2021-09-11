@@ -31,6 +31,7 @@ namespace Practic_3_curs.Models
                             + "VALUES ('" + carrier.Code + "', '" + carrier.Name + "', '"
                             + carrier.Mail + "')";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -54,6 +55,7 @@ namespace Practic_3_curs.Models
                 addCarrier.Mail = reader.GetString(2);
                 carriers.Add(addCarrier);
             }
+            DB.Close();
             return carriers;
         }
 
@@ -69,6 +71,7 @@ namespace Practic_3_curs.Models
             cmd.Connection = DB;
             cmd.CommandText = "DELETE FROM \"Carrier\" WHERE \"Code\" = '" + code + "'";
             cmd.ExecuteNonQuery();
+            DB.Close();
         }
 
         /// <summary>
@@ -94,6 +97,7 @@ namespace Practic_3_curs.Models
                     cmd.CommandText += " \"Mail\" = '" + carrier.Mail + "'";
                 cmd.CommandText += " WHERE \"Code\" = '" + carrier.Code + "'";
                 cmd.ExecuteNonQuery();
+                DB.Close();
             }
         }
     }
